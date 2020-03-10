@@ -14,7 +14,7 @@ data class Matrix(val rows: Int = 4, val cols: Int = 4) {
         matrix[3][3] = 1.0
     }
 
-    fun makeTranslate(x: Int, y: Int, z: Int) {
+    fun translate(x: Int, y: Int, z: Int) {
         for(i in 0..cols) {
             matrix[0][i] = matrix[0][i] + x
             matrix[1][i] = matrix[1][i] + y
@@ -22,7 +22,7 @@ data class Matrix(val rows: Int = 4, val cols: Int = 4) {
         }
     }
 
-    fun makeScale(x: Int, y: Int, z: Int) {
+    fun scale(x: Int, y: Int, z: Int) {
         for(i in 0..cols) {
             matrix[0][i] = matrix[0][i] * x
             matrix[1][i] = matrix[1][i] * y
@@ -30,7 +30,7 @@ data class Matrix(val rows: Int = 4, val cols: Int = 4) {
         }
     }
 
-    fun makeRotX(theta: Double): Matrix {
+    fun rotX(theta: Double): Matrix {
         val tmp = Matrix()
         tmp[1][1] = cos(theta)
         tmp[2][2] = cos(theta)
@@ -57,6 +57,9 @@ data class Matrix(val rows: Int = 4, val cols: Int = 4) {
         return matrixMult(tmp, this)
     }
 
+    fun generateCurveCoefs(p0: Int, p1: Int, p2: Int, p3: Int, t: Int) {
+
+    }
     operator fun get(index: Int):Array<Double> {
         return matrix[index]
     }

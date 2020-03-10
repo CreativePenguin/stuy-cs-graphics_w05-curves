@@ -17,4 +17,3 @@ It’s time to add curves to the graphics engine. Everything will work as before
 - For help creating your own image, you might want to use the following graphs:
     - Bezier: https://www.desmos.com/calculator/jydkmhkxac
     - Hermite: https://www.desmos.com/calculator/o9owo98ca5
-- 
