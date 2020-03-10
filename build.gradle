@@ -1,0 +1,43 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' version '1.3.70'
+}
+
+group 'io.github.creativepenguin'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+macosX64("linux") {
+    compilations.main {
+        cinterops {
+            ml6
+        }
+    }
+    binaries {
+        executable {
+            // ...
+        }
+    }
+}
+
+kotlin {
+    /* Targets configuration omitted. 
+    *  To find out how to configure the targets, please follow the link:
+    *  https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html#setting-up-targets */
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+    }
+}
