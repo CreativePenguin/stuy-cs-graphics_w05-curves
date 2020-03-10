@@ -2,16 +2,16 @@ package io.github.creativepenguin
 
 import kotlin.math.cos
 import kotlin.math.sin
+import kotlin.math.max
 
 data class Matrix(val rows: Int = 4, val cols: Int = 4) {
 
     val matrix: Array<Array<Double>> = Array(rows) { Array(cols) {0.0} }
 
     init {
-        matrix[0][0] = 1.0
-        matrix[1][1] = 1.0
-        matrix[2][2] = 1.0
-        matrix[3][3] = 1.0
+        val min_size = max(matrix.size(), matrix[0].size())
+        for(i in 0..min_size)
+            matrix[i][i] = 1.0
     }
 
     fun translate(x: Int, y: Int, z: Int) {

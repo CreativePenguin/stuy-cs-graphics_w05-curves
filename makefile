@@ -1,2 +1,4 @@
 all:
-  ./gradlew run
+	./gradlew run
+clean:
+	rm -r build/
