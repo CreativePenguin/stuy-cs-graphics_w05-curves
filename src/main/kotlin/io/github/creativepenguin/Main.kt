@@ -8,6 +8,8 @@ fun main() {
     val transform = ident()
     edges.add(125.0, 37.0, 15.0)
     edges.add(160.0, 343.0, 125.0)
+    println(edges)
+    println(edges.size)
     edges.drawLines(screen, Color.BLACK)
 //    parseFile("src/main/resources/script", transform, edges, screen)
 }

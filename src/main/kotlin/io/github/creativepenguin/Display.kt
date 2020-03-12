@@ -3,6 +3,7 @@ package io.github.creativepenguin
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileOutputStream
+import javax.swing.JFrame
 
 class BasicBitmapStorage(val width: Int, val height: Int) {
     val image = BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR)
@@ -32,4 +33,9 @@ class BasicBitmapStorage(val width: Int, val height: Int) {
     }
 
     fun clear() = image.graphics.clearRect(0, 0, width, height)
+}
+
+fun display(img: BasicBitmapStorage) {
+    val frame = JFrame()
+    frame.add(img)
 }

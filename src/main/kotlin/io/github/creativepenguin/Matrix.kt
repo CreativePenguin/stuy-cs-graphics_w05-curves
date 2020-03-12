@@ -9,7 +9,8 @@ import kotlin.math.sin
 data class Matrix(val cols: Int = 0) {
 
     private var matrix: Array<MutableList<Double>> = Array(4) { MutableList(cols) { 0.0 } }
-    val size = matrix[0].size
+    val size
+        get() = matrix[0].size
 
     fun translate(x: Int, y: Int, z: Int) {
         for (i in 0..cols) {
@@ -29,28 +30,28 @@ data class Matrix(val cols: Int = 0) {
 
     fun rotX(theta: Double) {
         val tmp = ident()
-        tmp[1][1] = cos(theta)
-        tmp[2][2] = cos(theta)
-        tmp[2][1] = sin(theta)
-        tmp[1][2] = -sin(theta)
+        tmp[1, 1] = cos(theta)
+        tmp[2, 2] = cos(theta)
+        tmp[2, 1] = sin(theta)
+        tmp[1, 2] = -sin(theta)
         matrix = matrixMult(tmp, matrix)
     }
 
     fun rotY(theta: Double) {
         val tmp = ident()
-        tmp[0][0] = -sin(theta)
-        tmp[2][2] = sin(theta)
-        tmp[2][1] = cos(theta)
-        tmp[0][2] = cos(theta)
+        tmp[0, 0] = -sin(theta)
+        tmp[2, 2] = sin(theta)
+        tmp[2, 1] = cos(theta)
+        tmp[0, 2] = cos(theta)
         matrix = matrixMult(tmp, matrix)
     }
 
     fun rotZ(theta: Double) {
         val tmp = Matrix()
-        tmp[0][0] = cos(theta)
-        tmp[1][1] = cos(theta)
-        tmp[0][1] = -sin(theta)
-        tmp[1][0] = sin(theta)
+        tmp[0, 0] = cos(theta)
+        tmp[1, 1] = cos(theta)
+        tmp[0, 1] = -sin(theta)
+        tmp[1, 0] = sin(theta)
         matrix = matrixMult(tmp, matrix)
     }
 
@@ -120,24 +121,24 @@ data class Matrix(val cols: Int = 0) {
         for (point in 0 until size - 1 step 2)
             drawLine(
                 matrix[0][point].toInt(), matrix[1][point].toInt(),
-                matrix[0][point + 1].toInt(), matrix[0][point + 1].toInt(), s, c)
+                matrix[0][point + 1].toInt(), matrix[1][point + 1].toInt(), s, c)
     }
 
-    operator fun get(index: Int): MutableList<Double> {
-        return matrix[index]
+    operator fun get(x: Int, y: Int): Double {
+        return matrix[x][y]
     }
 
-    operator fun set(index: Int, value: MutableList<Double>) {
-        matrix[index] = value
+    operator fun set(x: Int, y: Int, t: Double) {
+        matrix[x][y] = t
     }
 
     operator fun times(m: Matrix): Matrix {
         for (row in 0..m.cols) {
             for (col in 0..4) {
-                m[row][col] = (this[0][col] * m[row][0] +
-                        this[1][col] * m[row][1] +
-                        this[2][col] * m[row][2] +
-                        this[3][col] * m[row][3])
+                m[row, col] = (this[0, col] * m[row, 0] +
+                        this[1, col] * m[row, 1] +
+                        this[2, col] * m[row, 2] +
+                        this[3, col] * m[row, 3])
             }
         }
         return m
@@ -147,7 +148,7 @@ data class Matrix(val cols: Int = 0) {
         var ans = "[\n"
         for (row in matrix) {
             ans += "\t[ "
-            for (col in matrix) {
+            for (col in row) {
                 ans += "$col "
             }
             ans += "]\n"
@@ -159,7 +160,7 @@ data class Matrix(val cols: Int = 0) {
 
 fun ident(): Matrix {
     val ans = Matrix(4)
-    for (i in 0..3) ans[i][i] = 1.0
+    for (i in 0..3) ans[i, i] = 1.0
     return ans
 }
 
@@ -170,10 +171,10 @@ enum class CurveType {
 private fun matrixMult(m1: Matrix, m2: Array<MutableList<Double>>): Array<MutableList<Double>> {
     for (row in 0..m2[0].size) {
         for (col in 0..4) {
-            m2[row][col] = (m1[0][col] * m2[row][0] +
-                    m1[1][col] * m2[row][1] +
-                    m1[2][col] * m2[row][2] +
-                    m1[3][col] * m2[row][3])
+            m2[row][col] = (m1[0, col] * m2[row][0] +
+                    m1[1, col] * m2[row][1] +
+                    m1[2, col] * m2[row][2] +
+                    m1[3, col] * m2[row][3])
         }
     }
     return m2
