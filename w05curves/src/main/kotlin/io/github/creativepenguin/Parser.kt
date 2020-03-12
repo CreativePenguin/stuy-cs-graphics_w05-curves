@@ -9,10 +9,8 @@ private fun readFileAsTextUsingInputStream(fname: String) =
 private fun readFileAsLinesUsingBufferedReader(fname: String): List<String> =
     File(fname).bufferedReader().readLines()
 
-enum class ParseModes(isMultiStepScriptCommand: Boolean) {
-    LINE(true), MOVE(true), ROTATE(true), CIRCLE(true), HERMITE(true),
-    BEZIER(true),
-    IDENT(false), DISPLAY(false), NONE(false)
+enum class ParseModes {
+    LINE, MOVE, ROTATE, CIRCLE, HERMITE, BEZIER, IDENT, DISPLAY
 }
 
 fun parseFile(fname: String, transform: Matrix, edges: Matrix, s: BasicBitmapStorage) {
@@ -22,18 +20,9 @@ fun parseFile(fname: String, transform: Matrix, edges: Matrix, s: BasicBitmapSto
         try {
             when (ParseModes.valueOf(line.toUpperCase())) {
 
-                ParseModes.NONE -> {
-                    parsemodes = ParseModes.valueOf(line.toUpperCase())
-                    when (parsemodes) {
-                        ParseModes.IDENT -> {
-                            println("ident")
-                        }
-                    }
-                }
-
                 ParseModes.LINE -> {
-                    println("line")
-                    parsemodes = ParseModes.NONE
+                    val p = buffer.next().split(" ").toList<Double>
+                    edges.drawLine(p[0].toDouble())
                 }
 
                 //TODO: Restructure these things to use tuples
