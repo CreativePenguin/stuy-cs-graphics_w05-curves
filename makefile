@@ -1,4 +1,4 @@
 all:
-	w05curves/gradlew run
+	./gradlew run
 clean:
 	rm -r build/
