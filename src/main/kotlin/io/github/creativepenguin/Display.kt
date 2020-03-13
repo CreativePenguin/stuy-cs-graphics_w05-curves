@@ -37,5 +37,5 @@ class BasicBitmapStorage(val width: Int, val height: Int) {
 
 fun display(img: BasicBitmapStorage) {
     val frame = JFrame()
-    frame.add(img)
+//    frame.add(img)
 }

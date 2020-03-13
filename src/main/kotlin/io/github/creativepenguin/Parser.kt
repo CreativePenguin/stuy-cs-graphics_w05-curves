@@ -38,7 +38,7 @@ fun parseFile(fname: String, transform: Matrix, edges: Matrix, s: BasicBitmapSto
                     val points = buffer.next().split(" ")
                     val (cx, cy, dz, r) = points
                     edges.addCircle(
-                        cx.toDouble(), cy.toDouble(), dz.toDouble(), r.toDouble(), .05
+                        cx.toDouble(), cy.toDouble(), dz.toDouble(), r.toDouble(), .01
                     )
                 }
                 ParseModes.BEZIER -> {
@@ -48,7 +48,7 @@ fun parseFile(fname: String, transform: Matrix, edges: Matrix, s: BasicBitmapSto
                         p[2].toDouble(), p[3].toDouble(),
                         p[4].toDouble(), p[5].toDouble(),
                         p[6].toDouble(), p[7].toDouble(),
-                        .05, CurveType.BEZIER
+                        .01, CurveType.BEZIER
                     )
                 }
                 ParseModes.HERMITE -> {
@@ -58,12 +58,13 @@ fun parseFile(fname: String, transform: Matrix, edges: Matrix, s: BasicBitmapSto
                         p[2].toDouble(), p[3].toDouble(),
                         p[4].toDouble(), p[5].toDouble(),
                         p[6].toDouble(), p[7].toDouble(),
-                        .05, CurveType.HERMITE
+                        .01, CurveType.HERMITE
                     )
                 }
                 ParseModes.CLEAR -> s.clear()
                 ParseModes.DISPLAY -> {
                     val color = Colors.valueOf(buffer.next().toUpperCase())
+                    println(edges)
                     edges.drawLines(s, color.value)
 //                    (edges * transform).drawLines(s, color.value)
                 }

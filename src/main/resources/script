@@ -10,6 +10,10 @@ circle
 175 325 0 10
 circle
 325 325 0 10
+display
+white
+save
+src/main/resources/img.ppm
 hermite
 150 150 350 150 -100 -100 100 150
 bezier
@@ -34,4 +38,4 @@ hermite
 display
 green
 save
-face.png
+face.ppm

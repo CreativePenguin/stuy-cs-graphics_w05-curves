@@ -68,6 +68,7 @@ data class Matrix(val cols: Int = 0) {
             val t = i.toDouble()
             val x = r * cos(2 * PI * 1 / t) + cx
             val y = r * sin(2 * PI * 1 / t) + cy
+            if(t.isNaN() or x.isNaN() or y.isNaN()) continue
             this.add(x, y, dz)
         }
     }
@@ -118,10 +119,14 @@ data class Matrix(val cols: Int = 0) {
 
     fun drawLines(s: BasicBitmapStorage, c: Color) {
         if (size < 2) error("Need at least 2 points to draw line")
-        for (point in 0 until size - 1 step 2)
+        for (point in 0 until size - 1 step 2) {
+            println("{ ${matrix[0][point]}, ${matrix[1][point]}")
+            println("${matrix[0][point + 1]}, ${matrix[1][point + 1]} }")
             drawLine(
                 matrix[0][point].toInt(), matrix[1][point].toInt(),
-                matrix[0][point + 1].toInt(), matrix[1][point + 1].toInt(), s, c)
+                matrix[0][point + 1].toInt(), matrix[1][point + 1].toInt(), s, c
+            )
+        }
     }
 
     operator fun get(x: Int, y: Int): Double {
