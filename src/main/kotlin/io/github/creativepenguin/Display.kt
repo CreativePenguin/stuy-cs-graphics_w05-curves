@@ -4,11 +4,15 @@ import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.FileOutputStream
 import javax.swing.JFrame
+import kotlin.math.abs
 
 class BasicBitmapStorage(val width: Int, val height: Int) {
     val image = BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR)
 
-    fun setPixel(x: Int, y: Int, c: Color) = image.setRGB(x, y, c.rgb)
+    fun setPixel(_x: Int, _y: Int, c: Color) {
+        val (x, y) = Pair(abs(_x), abs(_y))
+        image.setRGB(x, y, c.rgb)
+    }
 
     private fun getPixel(x: Int, y: Int) = Color(image.getRGB(x, y))
 

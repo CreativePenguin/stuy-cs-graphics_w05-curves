@@ -62,19 +62,31 @@ data class Matrix(val cols: Int = 0) {
         matrix[3].add(1.0)
     }
 
-    fun addCircle(cx: Double, cy: Double, dz: Double, r: Double, _step: Double) {
-        val max = 1 / _step
-        for (i in 0..max.toInt()) {
-            val t = i.toDouble()
-            val x = r * cos(2 * PI * 1 / t) + cx
-            val y = r * sin(2 * PI * 1 / t) + cy
-            if(t.isNaN() or x.isNaN() or y.isNaN()) continue
-            this.add(x, y, dz)
+    fun addCircle(cx: Double, cy: Double, dz: Double, r: Double, step: Double) {
+        var t = 0.0
+        while (t < 1) {
+            val x = Pair(r * cos(2.0 * PI * t) + cx,
+                r * cos(2.0 * PI * (t + step)) + cx)
+            val y = Pair(r * sin(2.0 * PI * t) + cy,
+                r * sin(2.0 * PI * (t + step)) + cy)
+            add(x.first, y.first, dz)
+            add(x.second, y.second, dz)
+            t += step
         }
     }
 
+    private fun bezierH(p0: Double, p1: Double, p2: Double, p3: Double, t: Double) =
+        (-p0 + 3 * p1 - 3 * p2 + p3) * t.pow(3) +
+                (3 * p0 - 6 * p1 + 3 * p2) * t.pow(2) +
+                (-3 * p0 + 3 * p1) * t + p0
+
+    private fun hermiteH(p0: Double, p1: Double, p2: Double, p3: Double, t: Double) =
+        (2 * p0 - 2 * p3 + (p1 - p0) + (p3 - p2)) * t.pow(3) +
+                (-3 * p0 + 3 * p3 - 2 * (p1 - p0) - (p3 - p2)) * t.pow(2) +
+                (p1 - p0) + p0
+
     /**
-     * @param _step Must be between 0 and 1
+     * @param step Must be between 0 and 1
      */
     fun addCurve(
         x0: Double,
@@ -85,33 +97,34 @@ data class Matrix(val cols: Int = 0) {
         y2: Double,
         x3: Double,
         y3: Double,
-        _step: Double,
+        step: Double,
         type: CurveType
     ) {
-        val step = if (_step < 1) 1 / _step else _step
+        if (step > 1) throw error("parameter step must be between 0 and 1")
+//        val step = if (_step < 1) 1 / _step else _step
         when (type) {
             CurveType.BEZIER -> {
-                for (i in 0..step.toInt()) {
-                    val t = 1.0 / i
-                    val x = (-x0 + 3 * x1 - 3 * x2 + x3) * t.pow(3) +
-                            (3 * x0 - 6 * x1 + 3 * x2) * t.pow(2) +
-                            (-3 * x0 + 3 * x1) * t + x0
-                    val y = (-y0 + 3 * y1 - 3 * y2 + y3) * t.pow(3) +
-                            (3 * y0 - 6 * y1 + 3 * y2) * t.pow(2) +
-                            (-3 * y0 + 3 * y1) * t + y0
-                    add(x, y, 1.0)
+                var t = 0.0
+                while (t < 1) {
+                    val x = Pair(bezierH(x0, x1, x2, x3, t),
+                        bezierH(x0, x1, x2, x3, t + step))
+                    val y = Pair(bezierH(y0, y1, y2, y3, t),
+                        bezierH(y0, y1, y2, y3, t + step))
+                    add(x.first, y.first, 1.0)
+                    add(x.second, y.second, 1.0)
+                    t += step
                 }
             }
             CurveType.HERMITE -> {
-                for (i in 0..step.toInt()) {
-                    val t = 1.0 / i
-                    val x = (2 * x0 - 2 * x3 + (x1 - x0) + (x3 - x2)) * t.pow(3) +
-                            (-3 * x0 + 3 * x3 - 2 * (x1 - x0) - (x3 - x2)) * t.pow(2) +
-                            (x1 - x0) + x0
-                    val y = (2 * y0 - 2 * y3 + (y1 - y0) + (y3 - y2)) * t.pow(3) +
-                            (-3 * y0 + 3 * y3 - 2 * (y1 - y0) - (y3 - y2)) * t.pow(2) +
-                            (y1 - y0) + y0
-                    add(x, y, 1.0)
+                var t = 0.0
+                while (t < 1) {
+                    val x = Pair(hermiteH(x0, x1, x2, x3, t),
+                        hermiteH(x0, x1, x2, x3, t + step))
+                    val y = Pair(hermiteH(y0, y1, y2, y3, t),
+                        hermiteH(y0, y1, y2, y3, t + step))
+                    add(x.first, y.first, 1.0)
+                    add(x.second, y.second, 1.0)
+                    t += step
                 }
             }
         }

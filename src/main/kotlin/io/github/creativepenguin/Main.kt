@@ -1,9 +1,7 @@
 package io.github.creativepenguin
 
-import java.awt.Color
-
 fun main() {
-    val screen = BasicBitmapStorage(1000, 1000)
+    val screen = BasicBitmapStorage(500, 500)
     val edges = Matrix()
     val transform = ident()
 //    edges.add(125.0, 37.0, 15.0)
@@ -12,5 +10,5 @@ fun main() {
 //    println(edges.size)
 //    edges.drawLines(screen, Color.WHITE)
     parseFile("src/main/resources/script", transform, edges, screen)
-    screen.savePPM("src/main/resources/img.ppm")
+//    screen.savePPM("src/main/resources/img.ppm")
 }

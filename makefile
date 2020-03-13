@@ -1,5 +1,5 @@
 all:
 	./gradlew run
-	emacs src/main/resources/img.ppm
+	emacs face.ppm
 clean:
 	rm -r build/
